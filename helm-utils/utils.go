@@ -1,4 +1,4 @@
-package utils
+package helm_utils
 
 import (
 	"log"
@@ -6,14 +6,20 @@ import (
 
 	"helm.sh/helm/v3/pkg/action"
 	"helm.sh/helm/v3/pkg/cli"
+	"helm.sh/helm/v3/pkg/release"
 )
 
-func ListReleases(releaseName string, releaseNamespace string) {
+func GetRelease(releaseName string, releaseNamespace string) *release.Release {
 	settings := cli.New()
 	actionConfig := new(action.Configuration)
-	if err := actionConfig.Init(settings.RESTClientGetter(), releaseNamespace, os.Getenv("HELM_DRIVER"), nil); err != nil {
+	if err := actionConfig.Init(settings.RESTClientGetter(), "dmp-system", os.Getenv("HELM_DRIVER"), nil); err != nil {
 		log.Fatal(err)
 	}
 	getter := action.NewGet(actionConfig)
-	getter.Run(releaseName)
+	releaseInfo, err := getter.Run("swagger")
+	if err != nil {
+		log.Fatal(err)
+		return nil
+	}
+	return releaseInfo
 }
