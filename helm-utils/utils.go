@@ -9,10 +9,10 @@ import (
 	"helm.sh/helm/v3/pkg/release"
 )
 
-func GetRelease(releaseName string, releaseNamespace string) *release.Release {
+func GetRelease(releaseName string) *release.Release {
 	settings := cli.New()
 	actionConfig := new(action.Configuration)
-	if err := actionConfig.Init(settings.RESTClientGetter(), releaseNamespace, os.Getenv("HELM_DRIVER"), nil); err != nil {
+	if err := actionConfig.Init(settings.RESTClientGetter(), settings.Namespace(), os.Getenv("HELM_DRIVER"), nil); err != nil {
 		log.Fatal(err)
 	}
 	getter := action.NewGet(actionConfig)
