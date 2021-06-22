@@ -12,11 +12,11 @@ import (
 func GetRelease(releaseName string, releaseNamespace string) *release.Release {
 	settings := cli.New()
 	actionConfig := new(action.Configuration)
-	if err := actionConfig.Init(settings.RESTClientGetter(), "dmp-system", os.Getenv("HELM_DRIVER"), nil); err != nil {
+	if err := actionConfig.Init(settings.RESTClientGetter(), releaseNamespace, os.Getenv("HELM_DRIVER"), nil); err != nil {
 		log.Fatal(err)
 	}
 	getter := action.NewGet(actionConfig)
-	releaseInfo, err := getter.Run("swagger")
+	releaseInfo, err := getter.Run(releaseName)
 	if err != nil {
 		log.Fatal(err)
 		return nil
