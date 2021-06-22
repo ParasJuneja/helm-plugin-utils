@@ -1,4 +1,4 @@
-package helm_utils
+package utils
 
 import (
 	"log"
